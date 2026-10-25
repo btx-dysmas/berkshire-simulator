@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Berkshire Simulator</title>
+  <meta name="description" content="Probabilistic company valuation fitted to SEC filings, and a model of Berkshire Hathaway's float, subsidiaries and capital allocation.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>
+    // Apply the saved theme before the first paint.
+    try {
+      var t = new URLSearchParams(location.search).get("theme") || JSON.parse(localStorage.getItem("bsim:theme") || "null");
+      if (t === "dark" || (t === null && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark");
+    } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="modulepreload" href="/js/app.js">
+  <link rel="modulepreload" href="/js/lib.js">
+  <link rel="modulepreload" href="/js/views/company.js">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="#/">Berkshire Simulator</a>
+    <form class="omni" id="omni" autocomplete="off" role="search">
+      <input id="q" type="search" placeholder="Value a company: ticker or name" aria-label="Find a company" spellcheck="false">
+      <div class="suggest" id="suggest" hidden></div>
+    </form>
+    <nav class="topnav">
+      <a href="#/berkshire" data-nav="berkshire">Berkshire model</a>
+      <a href="#/portfolio" data-nav="portfolio">Portfolio</a>
+      <a href="#/method" data-nav="method">Method</a>
+    </nav>
+    <button class="theme-btn" id="theme" type="button"></button>
+  </header>
+  <main id="view"></main>
+  <footer class="foot">
+    Data from SEC EDGAR, the World Bank, FRED and Yahoo Finance. Simulated outcomes depend on the assumptions shown; not investment advice. Not affiliated with Berkshire Hathaway Inc.
+  </footer>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
