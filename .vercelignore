@@ -1,0 +1,5 @@
+# Not needed by the deployed app
+tests/
+docs/
+scripts/
+.cache/

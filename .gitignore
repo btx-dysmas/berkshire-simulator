@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.cache/
+.venv/
+.env
+.vercel/
+.pytest_cache/
+.claude/
