@@ -1,0 +1,39 @@
+{
+  "as_of": "2026-06-30",
+  "units": "USD billions unless noted",
+  "sources": {
+    "balance_sheet": "Form 10-Q for the quarter ended June 30, 2026 (accession 0001193125-26-341032)",
+    "earnings": "Earnings release for full-year 2025, Form 8-K exhibit 99.1 filed March 2, 2026 (0001193125-26-085801)",
+    "float_and_shares": "Earnings release for Q2 2026, Form 8-K exhibit 99.1 filed August 11, 2026 (0001193125-26-344495)"
+  },
+  "shares_a_equivalent": 1431693,
+  "shareholders_equity": 747.910,
+  "cash_and_tbills": 360.001,
+  "cash_note": "Insurance and Other cash ($35.096B) plus short-term U.S. Treasury Bills ($324.905B). Railroad, utilities and energy cash is left with those businesses.",
+  "equities_fair_value": 323.779,
+  "equities_cost": 106.521,
+  "fixed_maturities": 17.034,
+  "equity_method": 19.948,
+  "float": 177.5,
+  "premiums_earned_annual": 88.96,
+  "premiums_note": "First-half 2026 premiums earned of $44.48B, doubled.",
+  "parent_debt": 43.302,
+  "debt_note": "Notes payable and other borrowings of Insurance and Other. BNSF and BHE debt is not guaranteed by Berkshire and is netted inside their earnings.",
+  "earnings_2025": {
+    "insurance_underwriting": 7.258,
+    "insurance_investment_income": 12.513,
+    "bnsf": 5.476,
+    "bhe": 3.979,
+    "msr": 13.647,
+    "other": 1.613,
+    "operating": 44.486,
+    "net": 66.968,
+    "other_note": "Other includes $3.6B of parent-company investment income and a $0.64B currency loss. Without both it is about -$1.35B: equity-method earnings less corporate interest and costs."
+  },
+  "earnings_2024": {
+    "insurance_underwriting": 9.020,
+    "insurance_investment_income": 13.670,
+    "operating": 47.437,
+    "net": 88.995
+  }
+}
