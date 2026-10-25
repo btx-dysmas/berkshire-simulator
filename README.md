@@ -6,6 +6,10 @@ A normal DCF gives one number and quietly assumes the analyst knows the future. 
 
 **Live:** https://berkshire-simulator.vercel.app
 
+## Why I built this
+
+The honest reason: I didn't take a heavy math course in high school. My highest was Algebra II. I got a 4.0 in it, but that doesn't show much math on paper, and getting a job in finance means proving you can handle the quantitative side. So I built a project where the math is the substance: Bayesian regression, Markov chains, fat-tailed and correlated distributions, Monte Carlo simulation and expected-utility decisions. I had to learn most of it as I went, and I wanted to show that I can apply it, not just list it.
+
 ![Company valuation](docs/screenshots/company.png)
 
 ## What it does
