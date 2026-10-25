@@ -173,7 +173,7 @@ function draw(r) {
         <div><div class="chart tall" id="c-dist"></div></div>
         <div>
           ${d.buckets ? `<table class="grid"><thead><tr><th>Value per share</th><th class="r">Probability</th><th></th></tr></thead><tbody>
-            ${d.buckets.map((b) => `<tr><td>${bucketLabel(b)}<div class="muted" style="font-size:12px">${b.hi == null ? `above ${px(b.lo)}` : b.lo_x === 0 ? `below ${px(b.hi)}` : `${px(b.lo)} to ${px(b.hi)}`}</div></td>
+            ${d.buckets.map((b) => `<tr><td>${bucketLabel(b)}<div class="muted" style="font-size:13px">${b.hi == null ? `above ${px(b.lo)}` : b.lo_x === 0 ? `below ${px(b.hi)}` : `${px(b.lo)} to ${px(b.hi)}`}</div></td>
               <td class="r">${pct(b.p)}</td><td class="bar-cell"><i style="width:${(b.p * 100).toFixed(1)}%;${b.lo_x >= 1 ? "" : "background:var(--ink-3);opacity:.4"}"></i></td></tr>`).join("")}
           </tbody></table>` : '<div class="empty">Enter a share price to compare.</div>'}
         </div>
@@ -330,7 +330,7 @@ function bindBayes() {
       <tr><td>New reading</td><td class="r">${pct(u.observation.value, 2)}</td><td class="r">${pct(u.observation.sd, 2)}</td></tr>
       <tr class="total"><td>After</td><td class="r">${pct(u.posterior.mean, 2)}</td><td class="r">${pct(u.posterior.sd, 2)}</td></tr></tbody></table>
       <div class="chart short" id="c-bayes"></div>
-      <p class="muted" style="margin:0 22px 14px;font-size:12.5px">The new reading got ${pct(u.weight_on_data, 0)} of the weight: a precise belief moves little, a vague one moves a lot.</p>`;
+      <p class="muted" style="margin:0 22px 14px;font-size:13.5px">The new reading got ${pct(u.weight_on_data, 0)} of the weight: a precise belief moves little, a vague one moves a lot.</p>`;
     const xs = [], pdf = (m, s) => xs.map((x) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (s * Math.sqrt(2 * Math.PI)));
     const lo = Math.min(u.prior.mean - 3.5 * u.prior.sd, u.observation.value - 2 * u.observation.sd);
     const hi = Math.max(u.prior.mean + 3.5 * u.prior.sd, u.observation.value + 2 * u.observation.sd);

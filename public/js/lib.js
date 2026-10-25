@@ -106,14 +106,14 @@ export async function chart(el, data, layout = {}) {
   const Plotly = await loadPlotly();
   const grid = css("--line-2"), muted = css("--ink-3");
   const base = {
-    font: { family: "IBM Plex Sans, Segoe UI, sans-serif", size: 12, color: muted },
+    font: { family: "IBM Plex Sans, Segoe UI, sans-serif", size: 13, color: muted },
     paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
-    margin: { l: 52, r: 12, t: 16, b: 36 },
+    margin: { l: 58, r: 14, t: 18, b: 40 },
     // Light horizontal guides only; no frame, no vertical grid.
     xaxis: { showgrid: false, showline: false, zeroline: false, ticks: "", automargin: true, fixedrange: true },
     yaxis: { gridcolor: grid, griddash: "dot", showline: false, zeroline: false, ticks: "", automargin: true, fixedrange: true },
-    legend: { orientation: "h", y: -0.18, x: 0, font: { size: 12, color: css("--ink-2") } },
-    hoverlabel: { font: { family: "IBM Plex Sans, sans-serif", size: 12.5, color: css("--ink") }, bgcolor: css("--panel"), bordercolor: css("--line") },
+    legend: { orientation: "h", y: -0.18, x: 0, font: { size: 13, color: css("--ink-2") } },
+    hoverlabel: { font: { family: "IBM Plex Sans, sans-serif", size: 13.5, color: css("--ink") }, bgcolor: css("--panel"), bordercolor: css("--line") },
     hovermode: "closest",
     bargap: 0.08,
     showlegend: false,
