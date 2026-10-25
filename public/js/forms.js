@@ -19,9 +19,10 @@ const fromShow = (kind, s) => {
 };
 const unit = { pct: "%", usd: "$B", bn: "$B", num: "" };
 
+/** Groups render collapsed except the first, which holds the assumptions most people change. */
 export function fieldsHTML(groups, params) {
-  return groups.map(([title, fields]) => `
-    <fieldset><legend>${esc(title)}</legend>
+  return groups.map(([title, fields], gi) => `
+    <details class="group${gi === 0 ? " key" : ""}" ${gi === 0 ? "open" : ""}><summary>${esc(title)}</summary><div class="rows">
       ${fields.map(([path, label, kind, note]) => {
         const id = `f-${path.replace(/\./g, "-")}`;
         const v = getPath(params, path);
@@ -32,10 +33,11 @@ export function fieldsHTML(groups, params) {
         return `<div class="row" data-path="${path}"><label for="${id}">${esc(label)}${unit[kind] ? ` <span class="muted">${unit[kind]}</span>` : ""}${note ? `<small>${esc(note)}</small>` : ""}</label>
           <input class="field" id="${id}" data-kind="${kind}" inputmode="decimal" value="${toShow(kind, v)}"></div>`;
       }).join("")}
-    </fieldset>`).join("");
+    </div></details>`).join("");
 }
 
-/** Values from the form as an overrides object, and mark rows that differ from `base`. */
+/** Fields that differ from `base`, as an overrides object; their rows are marked. Untouched
+ * fields are left out so the server keeps their exact values rather than the rounded display. */
 export function readFields(root, base) {
   const out = {};
   for (const row of root.querySelectorAll(".row[data-path]")) {
@@ -43,10 +45,10 @@ export function readFields(root, base) {
     const el = row.querySelector("input, select");
     const kind = el.dataset.kind;
     const v = kind === "sel" ? el.value : fromShow(kind, el.value);
-    if (v === null) continue;
-    setPath(out, path, v);
     const b = getPath(base, path);
-    row.classList.toggle("changed", kind === "sel" ? String(b) !== v : !(ok(b) && Math.abs(toShow(kind, b) - toShow(kind, v)) < 1e-9));
+    const changed = v !== null && (kind === "sel" ? String(b) !== v : !(ok(b) && Math.abs(toShow(kind, b) - toShow(kind, v)) < 1e-9));
+    row.classList.toggle("changed", changed);
+    if (changed) setPath(out, path, v);
   }
   return out;
 }

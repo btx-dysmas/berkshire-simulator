@@ -16,7 +16,7 @@ export async function render(root) {
     <div class="bench">
       <form class="panel inputs" id="pf" autocomplete="off">
         <header><h2>Holdings</h2><span class="sub">ticker and weight</span></header>
-        <fieldset id="pf-rows">${rows.map(rowHTML).join("")}</fieldset>
+        <div class="rows" id="pf-rows" style="padding:4px 20px 12px">${rows.map(rowHTML).join("")}</div>
         <div class="actions"><button class="btn primary">Simulate</button><button class="btn" type="button" id="pf-add">Add holding</button></div>
       </form>
       <div id="pf-out"><div class="empty">Run the simulation to see the combined distribution.</div></div>
@@ -29,8 +29,8 @@ export async function render(root) {
 }
 
 function rowHTML(r) {
-  return `<div class="row" style="grid-template-columns:1fr 70px 24px"><input class="field wide" data-t value="${esc(r.ticker)}" placeholder="Ticker" style="text-transform:uppercase">
-    <input class="field" data-w value="${r.weight}" inputmode="decimal"><button type="button" class="btn small" data-del title="Remove" aria-label="Remove">×</button></div>`;
+  return `<div class="row" style="grid-template-columns:1fr 60px 26px"><input class="field wide" data-t value="${esc(r.ticker)}" placeholder="Ticker" style="text-transform:uppercase">
+    <input class="field" data-w value="${r.weight}" inputmode="decimal"><button type="button" class="btn small" style="width:26px;padding:0;justify-content:center" data-del title="Remove" aria-label="Remove">×</button></div>`;
 }
 
 async function run() {

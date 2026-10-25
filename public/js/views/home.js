@@ -15,7 +15,7 @@ export async function render(root) {
       <form class="home-search" id="home-q" autocomplete="off">
         <input placeholder="Ticker or company name" aria-label="Find a company" spellcheck="false" autofocus>
         <div class="suggest" hidden></div>
-        <button class="btn primary" style="height:36px">Simulate</button>
+        <button class="btn primary">Simulate</button>
       </form>
       <div class="hint">Try ${EXAMPLES.map((t) => `<a href="#/c/${t}">${t}</a>`).join("")}</div>
       <div class="cols c2">

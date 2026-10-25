@@ -69,10 +69,7 @@ export async function render(root) {
         <span><b>Balance sheet as of</b>${esc(s.as_of)}</span>
       </div>
     </div>
-    <p class="lede">The company valuation treats a business as revenue, margins and reinvestment. That does not describe Berkshire. Here the
-      balance sheet is simulated directly: underwriting results and float, interest on the T-bill pile, a stock portfolio that moves with the
-      market regime, subsidiaries that keep part of what they earn, and a capital allocation policy deciding where the rest goes. Everything is
-      tracked per share.</p>
+    <p class="lede">Berkshire is not revenue and margins, so this model simulates its balance sheet instead: underwriting and float, the T-bill pile, the stock portfolio, the subsidiaries, and a capital allocation policy. Everything is tracked per share.</p>
     <div class="bench">
       <form class="panel inputs" id="inputs" autocomplete="off">
         <header><h2>Assumptions</h2><span class="sub">seeded from the 10-Q</span></header>
@@ -114,31 +111,40 @@ async function run() {
   }
 }
 
-const band = (q, f = pct) => `${f(q.p50)} <span class="muted">(${f(q.p5)} to ${f(q.p95)})</span>`;
+const range = (q, f = pct) => `${f(q.p5)} to ${f(q.p95)}`;
 
 function draw(r) {
   const s = r.summary, g = s.growth, p = r.params;
   const fl = s.float, al = s.allocation, e = s.earnings;
   const p2v = s.start.price / s.start.iv_ps;
+  const swing = e.volatility.gaap / e.volatility.op;
   $("#out").innerHTML = `
-    <section class="panel">
-      <header><h2>Value per share over ${p.horizon} years</h2><span class="sub">10,000 paths</span></header>
-      <dl class="kv two">
-        <dt>Intrinsic value / share today</dt><dd>${px(s.start.iv_ps)}</dd>
-        <dt>Price / intrinsic value</dt><dd>${p2v.toFixed(2)}</dd>
-        <dt>Intrinsic value / share, yearly growth</dt><dd>${band(g.iv_ps)}</dd>
-        <dt>Book value / share, yearly growth</dt><dd>${band(g.bv_ps)}</dd>
-        <dt>Shareholder return from today's price</dt><dd>${band(g.holder)}</dd>
-        <dt>Chance the stock is lower in year ${p.horizon}</dt><dd>${pct(g.p_holder_loss)}</dd>
-        <dt>Operating earnings growth, total</dt><dd>${pct(g.op_total.p50)}</dd>
-        <dt>Operating earnings growth, per share</dt><dd>${pct(g.op_ps.p50)}</dd>
-      </dl>
-      <div class="note">Intrinsic value is a sum of the parts: cash and bonds at face, stocks after the tax owed on their gains, each subsidiary at a
-        multiple of its earnings, less parent debt and the <b>economic</b> cost of the float (below). The stock trades around that value with a
-        mean-reverting discount or premium that widens in recessions; the shareholder return assumes it is sold at that price.</div>
+    <section class="panel hero">
+      <div class="hero-top"><h2>10,000 simulated decades · balance sheet as of the June 2026 10-Q</h2></div>
+      <p class="claim">The model values Berkshire at <b>${px(s.start.iv_ps)}</b> a Class A share, against a price of ${px(s.start.price)}.
+        Value per share compounds at about <b>${pct(g.iv_ps.p50)}</b> a year in the median future, and a buyer at today's price earns ${pct(g.holder.p50)}
+        because the stock ${p2v > 1 ? "starts at a premium to" : "starts below"} its value.</p>
+      <div class="metrics">
+        <div class="metric"><div class="k">Intrinsic value per share</div><div class="v">${px(s.start.iv_ps)}</div><div class="s">price is ${p2v.toFixed(2)}x value</div></div>
+        <div class="metric"><div class="k">Value per share growth</div><div class="v">${pct(g.iv_ps.p50)}</div><div class="s">${range(g.iv_ps)} a year</div></div>
+        <div class="metric"><div class="k">Return from today's price</div><div class="v">${pct(g.holder.p50)}</div><div class="s">${pct(g.p_holder_loss, 0)} chance of a loss</div></div>
+        <div class="metric"><div class="k">Economic cost of float</div><div class="v">${bn(fl.start_liability, 0)}</div><div class="s">carried at ${bn(fl.start, 1)} in book value</div></div>
+      </div>
     </section>
-    <section class="panel"><header><h2>Per-share value paths</h2><span class="sub">intrinsic value with 25–75th and 5–95th percentile bands; medians for book value and price</span></header>
-      <div class="chart" id="b-iv"></div></section>
+
+    <section class="panel"><header><h2>Value per share</h2><span class="sub">intrinsic value with 50% and 90% bands; median price and book value</span></header>
+      <div class="chart tall" id="b-iv"></div>
+      <div class="stats">
+        <div class="stat"><div class="k">Book value per share growth</div><div class="v">${pct(g.bv_ps.p50)} <small>${range(g.bv_ps)}</small></div></div>
+        <div class="stat"><div class="k">Operating earnings growth, total</div><div class="v">${pct(g.op_total.p50)}</div></div>
+        <div class="stat"><div class="k">Operating earnings growth, per share</div><div class="v">${pct(g.op_ps.p50)}</div></div>
+        <div class="stat"><div class="k">Shares outstanding, year ${p.horizon}</div><div class="v">${pct(al.share_change, 1, true)}</div></div>
+      </div>
+      <details class="explain"><summary>How intrinsic value is built</summary>
+        <p>A sum of the parts: cash and bonds at face, stocks less the tax owed on their gains, each subsidiary at a multiple of its earnings, minus parent debt and the
+          economic cost of the float. The stock trades around that value with a discount or premium that reverts over time and widens in recessions.</p>
+      </details>
+    </section>
 
     <div class="cols c2">
       <section class="panel"><header><h2>Three measures of earnings</h2><span class="sub">one simulated path</span></header>
@@ -148,29 +154,29 @@ function draw(r) {
           <tr><td>Operating earnings</td><td class="r">${bn(e.median.op[0])}</td><td class="r">${pct(e.volatility.op, 0)}</td></tr>
           <tr><td>Look-through earnings</td><td class="r">${bn(e.median.look[0])}</td><td class="r">${pct(e.volatility.look, 0)}</td></tr>
         </tbody></table>
-        <div class="note">Since 2018 GAAP has put the change in unrealized gains on stocks through net income, so it swings with the market. Operating
-          earnings leave that out. Look-through earnings add Berkshire's share of what its investees earned and kept, less the tax due if it were
-          paid out: closer to what the stock portfolio actually earns. The swing is the standard deviation of year-over-year change.</div>
+        <details class="explain"><summary>Why GAAP swings ${Math.round(swing)} times as much</summary>
+          <p>Since 2018 GAAP has run the change in unrealized gains on stocks through net income, so it moves with the market. Operating earnings leave that out.
+            Look-through earnings add Berkshire's share of what its investees earned and kept, less the tax due if it were paid out.</p>
+        </details>
       </section>
       <section class="panel"><header><h2>Float is a liability, not equity</h2></header>
-        <dl class="kv">
-          <dt>Float on the balance sheet</dt><dd>${bn(fl.start)}</dd>
-          <dt>Carried in book value at</dt><dd>${bn(fl.start)} liability</dd>
-          <dt>Present value of what it will cost</dt><dd>${bn(fl.start_liability)}</dd>
-          <dt>Float in year ${p.horizon}, median</dt><dd>${bn(fl.end)}</dd>
-          <dt>Cost of float, average per year</dt><dd class="${tone(-fl.cost.p50)}">${band(fl.cost)}</dd>
-          <dt>Paths where float cost nothing on average</dt><dd>${pct(fl.p_costless)}</dd>
-        </dl>
+        <div class="stats">
+          <div class="stat"><div class="k">Book value carries it at</div><div class="v">${bn(fl.start)}</div></div>
+          <div class="stat"><div class="k">Present value of its cost</div><div class="v">${bn(fl.start_liability)}</div></div>
+          <div class="stat"><div class="k">Cost of float per year</div><div class="v ${tone(-fl.cost.p50)}">${pct(fl.cost.p50)} <small>${range(fl.cost)}</small></div></div>
+          <div class="stat"><div class="k">Float in year ${p.horizon}</div><div class="v">${bn(fl.end, 0)}</div></div>
+        </div>
         <div class="chart short" id="b-float"></div>
-        <div class="note">Float arrives as cash and is invested, but it belongs to policyholders and never counts as equity here: book value carries it
-          at face and intrinsic value carries it at the present value of the claims and underwriting results it will cost, discounted at
-          ${pct(p.valuation.float_rate)}, growing for ${p.valuation.float_growth_years} years and then running off. A negative cost of float means
-          underwriting is profitable and Berkshire is paid to hold the money. As the combined ratio rises the economic liability climbs toward face value.</div>
+        <details class="explain"><summary>How the float is valued</summary>
+          <p>Float arrives as cash and is invested, but it belongs to policyholders. Book value carries it at face. Intrinsic value carries it at the present value of the claims
+            and underwriting results it will cost, discounted at ${pct(p.valuation.float_rate)}, growing for ${p.valuation.float_growth_years} years and then running off. A negative
+            cost means underwriting is profitable and Berkshire is paid to hold the money; as the combined ratio rises the liability climbs toward face value.</p>
+        </details>
       </section>
     </div>
 
     <section class="panel"><header><h2>Where the cash went</h2><span class="sub">average across paths, ${p.horizon} years</span></header>
-      <div class="cols c2" style="gap:0">
+      <div class="split">
         <table class="grid"><tbody>
           <tr><td>Acquisitions paid in cash</td><td class="r">${bn(al.acq_cash, 0)}</td></tr>
           <tr><td>Acquisitions paid in stock</td><td class="r">${bn(al.acq_stock, 0)}</td></tr>
@@ -179,11 +185,11 @@ function draw(r) {
           <tr><td>New stock purchases</td><td class="r">${bn(al.eq_buy, 0)}</td></tr>
           <tr class="total"><td>Cash and T-bills at the end, median</td><td class="r">${bn(al.ending_cash, 0)}</td></tr>
         </tbody></table>
-        <dl class="kv">
-          <dt>Change in share count, median</dt><dd>${pct(al.share_change, 1, true)}</dd>
-          <dt>Acquisitions per path</dt><dd>${s.acquisitions.per_path.toFixed(1)}</dd>
-          <dt>Share that raised value per share</dt><dd>${pct(s.acquisitions.accretive_share, 0)}</dd>
-        </dl>
+        <div class="stats" style="padding-top:14px">
+          <div class="stat"><div class="k">Acquisitions per path</div><div class="v">${s.acquisitions.per_path.toFixed(1)}</div></div>
+          <div class="stat"><div class="k">Deals that raised value per share</div><div class="v">${pct(s.acquisitions.accretive_share, 0)}</div></div>
+          <div class="stat"><div class="k">Change in share count</div><div class="v">${pct(al.share_change, 1, true)}</div></div>
+        </div>
       </div>
     </section>`;
 
@@ -214,9 +220,9 @@ function drawPolicies(rows) {
         <td class="r ${r.key !== "baseline" ? tone(r.op_ps - base.op_ps) : ""}">${pct(r.op_ps, 2)}</td>
         <td class="r">${r.beats_baseline == null ? "—" : pct(r.beats_baseline, 0)}</td></tr>`).join("")}
     </tbody></table></div>
-    <div class="note">Every policy runs on the same simulated economies, underwriting years and deal offers, so a difference comes from the policy.
+    <details class="explain"><summary>How to read this</summary><p>Every policy runs on the same simulated economies, underwriting years and deal offers, so a difference comes from the policy.
       Value per share includes dividends received. Compare total and per-share earnings growth: issuing stock for acquisitions adds earnings in
-      total and subtracts them per share whenever the shares given up were worth more than what they bought.</div></section>`;
+      total and subtracts them per share whenever the shares given up were worth more than what they bought.</p></details></section>`;
 }
 
 function labHTML(d) {
@@ -233,13 +239,13 @@ function labHTML(d) {
   ];
   return `<section class="panel" id="lab"><header><h2>One acquisition, worked through</h2><span class="sub">why total earnings can rise while value per share falls</span>
       <span class="right"><span class="seg" id="lab-fund"><button type="button" class="on" data-f="stock">Pay in stock</button><button type="button" data-f="cash">Pay in cash</button></span></span></header>
-    <div class="cols c2" style="gap:0">
-      <div class="inputs" style="position:static;max-height:none"><fieldset>${inputs.map(([k, l, v, u]) => `<div class="row"><label for="lab-${k}">${esc(l)}${u ? ` <span class="muted">${u}</span>` : ""}</label><input class="field" id="lab-${k}" data-k="${k}" value="${+(+v).toPrecision(5)}"></div>`).join("")}</fieldset></div>
+    <div class="split">
+      <div class="inputs" style="position:static;max-height:none"><div class="rows" style="padding:8px 22px 12px">${inputs.map(([k, l, v, u]) => `<div class="row"><label for="lab-${k}">${esc(l)}${u ? ` <span class="muted">${u}</span>` : ""}</label><input class="field" id="lab-${k}" data-k="${k}" value="${+(+v).toPrecision(5)}"></div>`).join("")}</div></div>
       <div id="lab-out"></div>
     </div>
-    <div class="note">A stock deal hands sellers a share of everything Berkshire owns. If Berkshire's stock trades below its value, each share given up
+    <details class="explain"><summary>Why a stock deal can destroy value</summary><p>A stock deal hands sellers a share of everything Berkshire owns. If Berkshire's stock trades below its value, each share given up
       is worth more than its price, so the deal must earn more than it costs on paper just to break even per share. This is the arithmetic behind
-      Buffett's regret over paying for General Re with stock in 1998.</div>
+      Buffett's regret over paying for General Re with stock in 1998.</p></details>
   </section>`;
 }
 

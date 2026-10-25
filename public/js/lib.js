@@ -104,16 +104,18 @@ export function setTheme(dark) {
 export async function chart(el, data, layout = {}) {
   if (!el) return;
   const Plotly = await loadPlotly();
-  const grid = css("--line-2"), axis = css("--line");
+  const grid = css("--line-2"), muted = css("--ink-3");
   const base = {
-    font: { family: "IBM Plex Sans, Segoe UI, sans-serif", size: 12, color: css("--ink-2") },
-    paper_bgcolor: css("--panel"), plot_bgcolor: css("--panel"),
-    margin: { l: 58, r: 16, t: 10, b: 40 },
-    xaxis: { gridcolor: grid, linecolor: axis, tickcolor: axis, zeroline: false, automargin: true },
-    yaxis: { gridcolor: grid, linecolor: axis, zerolinecolor: axis, automargin: true },
-    legend: { orientation: "h", y: -0.2, x: 0, font: { size: 12 } },
-    hoverlabel: { font: { family: "IBM Plex Sans, sans-serif", size: 12, color: css("--ink") }, bgcolor: css("--panel"), bordercolor: axis },
-    bargap: 0.04,
+    font: { family: "IBM Plex Sans, Segoe UI, sans-serif", size: 12, color: muted },
+    paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+    margin: { l: 52, r: 12, t: 16, b: 36 },
+    // Light horizontal guides only; no frame, no vertical grid.
+    xaxis: { showgrid: false, showline: false, zeroline: false, ticks: "", automargin: true, fixedrange: true },
+    yaxis: { gridcolor: grid, griddash: "dot", showline: false, zeroline: false, ticks: "", automargin: true, fixedrange: true },
+    legend: { orientation: "h", y: -0.18, x: 0, font: { size: 12, color: css("--ink-2") } },
+    hoverlabel: { font: { family: "IBM Plex Sans, sans-serif", size: 12.5, color: css("--ink") }, bgcolor: css("--panel"), bordercolor: css("--line") },
+    hovermode: "closest",
+    bargap: 0.08,
     showlegend: false,
   };
   const merged = { ...base, ...layout, xaxis: { ...base.xaxis, ...layout.xaxis }, yaxis: { ...base.yaxis, ...layout.yaxis }, margin: { ...base.margin, ...layout.margin } };
@@ -126,10 +128,10 @@ export function fanTraces(x, f, i = 0, name = "Median", scale = 1) {
   const s = (a) => a.map((v) => v * scale);
   return [
     { x, y: s(f.p95), mode: "lines", line: { width: 0 }, hoverinfo: "skip", showlegend: false },
-    { x, y: s(f.p5), mode: "lines", line: { width: 0 }, fill: "tonexty", fillcolor: hexA(c, 0.12), hoverinfo: "skip", showlegend: false },
+    { x, y: s(f.p5), mode: "lines", line: { width: 0 }, fill: "tonexty", fillcolor: hexA(c, 0.10), hoverinfo: "skip", showlegend: false },
     { x, y: s(f.p75), mode: "lines", line: { width: 0 }, hoverinfo: "skip", showlegend: false },
-    { x, y: s(f.p25), mode: "lines", line: { width: 0 }, fill: "tonexty", fillcolor: hexA(c, 0.22), hoverinfo: "skip", showlegend: false },
-    { x, y: s(f.p50), mode: "lines", name, line: { color: c, width: 2 } },
+    { x, y: s(f.p25), mode: "lines", line: { width: 0 }, fill: "tonexty", fillcolor: hexA(c, 0.20), hoverinfo: "skip", showlegend: false },
+    { x, y: s(f.p50), mode: "lines", name, line: { color: c, width: 2.5, shape: "spline", smoothing: 0.6 } },
   ];
 }
 
