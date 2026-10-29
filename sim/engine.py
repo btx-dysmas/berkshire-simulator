@@ -132,6 +132,7 @@ def simulate(p: dict, n: int = 10_000, seed: int = 7, fix: dict | None = None, k
     nopat = np.empty((n, H))
     disc = np.empty((n, H))
     fade = 0.5 ** (1 / g["halflife"])
+    tg_log = np.log1p(tg)
 
     rev_prev = np.full(n, p["revenue"])
     m_prev = np.full(n, m["current"])
@@ -146,7 +147,8 @@ def simulate(p: dict, n: int = 10_000, seed: int = 7, fix: dict | None = None, k
         margin_target = np.where(hit_dis, margin_target * comp["disruptive"]["margin_mult"], margin_target)
         ronic = np.where(hit_dis, wacc, ronic)
 
-        trend = tg + (lr_growth - tg) * fade ** (t + 1)
+        # Growth here is in logs; the terminal rate is a simple rate, so convert it before fading toward it.
+        trend = tg_log + (lr_growth - tg_log) * fade ** (t + 1)
         gt = trend + g["gdp_beta"] * gdp[:, t] + g["cpi_beta"] * cpi[:, t] + g["sd"] * eg[:, t] + growth_hit[:, t]
         gt = np.maximum(gt, -0.9)
         rev = rev_prev * np.exp(gt)

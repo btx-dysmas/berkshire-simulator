@@ -40,7 +40,7 @@ The first decision layer computed a certainty-equivalent return on the stock alo
 
 ## 9. Berkshire: float at its economic cost
 
-Book value carries float at face: a $177.5B liability. Treating float as equity would be wrong, because it belongs to policyholders and has to be paid back. Treating it as a debt at face ignores that Berkshire has usually been paid to hold it. Intrinsic value uses the present value of its future cash flows instead. Float grows with premiums for ten years and then runs off over ten. Each year it costs the underwriting result. It is discounted near the risk-free rate because the obligation is debt-like. At a 0.96 combined ratio that is about $28B. At 1.00 it is about $74B, and at 1.06 about $143B. It passes face value only when underwriting losses run high enough to outweigh the new float coming in.
+Book value carries float at face: a $177.5B liability. Treating float as equity would be wrong, because it belongs to policyholders and has to be paid back. Treating it as a debt at face ignores that Berkshire has usually been paid to hold it. Intrinsic value uses the present value of its future cash flows instead. Float grows with premiums for ten years and then runs off over ten. Each year it costs the underwriting result after tax, since losses are deductible and profits are taxed. It is discounted near the risk-free rate because the obligation is debt-like. At a 0.96 combined ratio that is about $37B. At 1.00 it is about $74B, and at 1.06 about $129B. It passes face value only when underwriting losses run high enough to outweigh the new float coming in.
 
 ## 10. Policies compared on the same futures
 

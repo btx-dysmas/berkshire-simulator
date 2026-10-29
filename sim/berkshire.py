@@ -31,7 +31,7 @@ from . import market, regimes
 from .engine import merged
 
 TAX = 0.21
-DIVIDEND_TAX = 0.13  # dividends received by a corporation are mostly exempt
+DIVIDEND_TAX = 0.105  # 21% on the half left after the 50% dividends-received deduction (stakes under 20%)
 SEED_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "berkshire.json")
 
 
@@ -176,7 +176,8 @@ def simulate(p: dict, n: int = 10_000, seed: int = 11) -> dict:
 
     def intrinsic(cash, eq, eq_cost, F, prem, sub_earn, acq_earn, y):
         deferred = np.maximum(eq - eq_cost, 0) * TAX
-        cost = (ins["combined_ratio"] - 1) * prem / F
+        # Underwriting losses are deductible and profits taxed, so the float costs its after-tax result.
+        cost = (ins["combined_ratio"] - 1) * (1 - TAX) * prem / F
         liab = float_liability(F, cost, ins["premium_growth"], val["float_rate"], val["float_growth_years"], val["float_runoff_years"])
         businesses = sum(sub_earn[k] * subs[k]["multiple"] for k in subs) + acq_earn * acq["value_multiple"]
         total = cash + eq - deferred + b["fixed"] + b["equity_method"] + businesses - b["debt"] - liab
@@ -210,9 +211,11 @@ def simulate(p: dict, n: int = 10_000, seed: int = 11) -> dict:
         y = np.maximum(y + 0.35 * (inv["bill_long_run"] - y) + bill_move[:, t] + 0.004 * rng.standard_normal(n), 0.0)
         interest = cash * y * (1 - TAX)
         mret = mkt_mu[:, t] + mkt_sd[:, t] * rng.standard_normal(n)
-        price_chg = eq * (inv["portfolio_beta"] * (mret - inv["dividend_yield"]) + (1 - inv["portfolio_beta"]) * 0.05)
+        # CAPM: the portfolio earns the bill rate plus beta times the market's excess return; the
+        # dividend part of that total return is paid out, the rest is price change.
+        price_chg = eq * (y + inv["portfolio_beta"] * (mret - y) - inv["dividend_yield"])
         divs = eq * inv["dividend_yield"] * (1 - DIVIDEND_TAX)
-        retained = eq * inv["retained_yield"] * (1 - TAX)
+        retained = eq * inv["retained_yield"] * (1 - DIVIDEND_TAX)
         eq = np.maximum(eq + price_chg, 0)
 
         # Operating businesses: growth comes from what each keeps and earns on it, plus the economy.
