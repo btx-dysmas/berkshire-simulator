@@ -52,10 +52,11 @@ def beta(ticker: str) -> dict | None:
     common = sorted(set(sa) & set(sm))
     x = np.array([sm[t] for t in common])
     y = np.array([sa[t] for t in common])
-    ok = ~(np.isnan(x) | np.isnan(y))
-    x, y = x[ok], y[ok]
-    if len(x) < 24:
-        return None
+    # Returns only between consecutive months that both have prices, so a gap never becomes a two-month return.
     rx, ry = np.diff(np.log(x)), np.diff(np.log(y))
+    ok = ~(np.isnan(rx) | np.isnan(ry))
+    rx, ry = rx[ok], ry[ok]
+    if len(rx) < 24:
+        return None
     raw = float(np.cov(ry, rx)[0, 1] / np.var(rx, ddof=1))
     return {"raw": raw, "adjusted": 0.67 * raw + 0.33, "months": int(len(rx))}

@@ -332,7 +332,9 @@ def summarize(p: dict, r: dict) -> dict:
     bv_cagr = _cagr(r["bv_ps"][:, -1], s["bv_ps"], H)
     op_total_cagr = _cagr(r["op"][:, -1], np.median(r["op"][:, 0]), H - 1)
     op_ps_cagr = _cagr(r["op_ps"][:, -1], np.median(r["op_ps"][:, 0]), H - 1)
-    holder = _cagr(r["price"][:, -1], s["price"], H)
+    # A holder also collects any dividends paid along the way.
+    divs_ps = (r["dividends"] / r["shares"] * 1e3).sum(axis=1)
+    holder = _cagr(r["price"][:, -1] + divs_ps, s["price"], H)
 
     def yoy_sd(a):
         ch = np.diff(a, axis=1) / np.maximum(np.abs(a[:, :-1]), 1e-9)
