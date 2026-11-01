@@ -76,7 +76,9 @@ def fit(ticker: str) -> dict:
     # Pair each fiscal year with the macro year it mostly falls in. World Bank data lags a year, so
     # the latest fiscal year can be missing; it still counts for margins and reinvestment.
     def macro_for(r):
-        y = r["fy"] if int(r["end"][5:7]) >= 7 else r["fy"] - 1
+        # The calendar year holding most of the fiscal year, from the end date (fy is already shifted for Jan-Mar year ends).
+        end_year, end_month = int(r["end"][:4]), int(r["end"][5:7])
+        y = end_year if end_month >= 7 else end_year - 1
         m = years.get(min(y, last_macro))
         return m["gdp"] - gdp_mean, m["cpi"] - cpi_mean, m["regime"]
 
