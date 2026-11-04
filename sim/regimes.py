@@ -65,7 +65,7 @@ def simulate(n: int, years: int, start: int, rng: np.random.Generator, P: np.nda
 
 
 def conditions(states: np.ndarray, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
-    """GDP growth and inflation, as deviations from their 1961-2024 means, for each path-year."""
+    """GDP growth and inflation, as deviations from their 1961-2025 means, for each path-year."""
     m = macro()
     st = [m["stats"][name] for name in m["regimes"]]
     g_mu = np.array([s["gdp"] for s in st]) - m["gdp_mean"]

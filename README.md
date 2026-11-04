@@ -19,7 +19,7 @@ The honest reason: I didn't take a heavy math course in high school. My highest 
 - Simulates correlated, fat-tailed (Student-t) growth and margin shocks. Margins revert toward their long-run level, and growth fades toward the terminal rate.
 - Growth has to be paid for. Reinvestment is revenue added divided by the company's sales-to-capital ratio.
 - Competitive shocks arrive as hazards: mild, significant or disruptive. A disruptive one pushes the return on new capital down to the cost of capital.
-- Five economic regimes (expansion, neutral, high inflation, recession, severe crisis) follow a Markov chain fitted to 1961–2024. An inflationary regime raises the discount rate.
+- Five economic regimes (expansion, neutral, high inflation, recession, severe crisis) follow a Markov chain fitted to 1961–2025. An inflationary regime raises the discount rate.
 - Reports the probability that value exceeds the price, expected value with its confidence interval, outcome ranges, the 5th percentile, and the growth the market price implies (a reverse DCF).
 - Decision layer: margin of safety, the chance of losing money over ten years, the certainty-equivalent return under CRRA utility, and a Kelly fraction computed from the simulated outcomes.
 - Sensitivity two ways: a tornado chart with common random numbers, and a standardized rank regression for each driver's share of the variance.
@@ -49,7 +49,7 @@ Light and dark themes, following the system setting until you pick one.
 | SEC EDGAR company facts and submissions | Annual and quarterly financials, share counts, SIC codes |
 | Berkshire 10-Q (June 30, 2026) and earnings releases | Seed balance sheet, float and segment earnings ([data/berkshire.json](data/berkshire.json)) |
 | World Bank | U.S. real GDP growth and CPI inflation, 1961 onward |
-| FRED (TB3MS) | 3-month T-bill yields by year |
+| FRED (TB3MS, CPIAUCSL) | 3-month T-bill yields by year; CPI-U inflation for the latest year before the World Bank publishes it |
 | Yahoo Finance | Share prices, the 10-year Treasury yield, betas, S&P 500 history |
 
 Everything is free. The regime data is built once by [scripts/build_macro.py](scripts/build_macro.py) and committed to [data/macro.json](data/macro.json).

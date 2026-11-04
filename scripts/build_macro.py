@@ -32,14 +32,14 @@ def yahoo_daily(symbol):
     return out
 
 
-def fred_annual(series):
+def fred_annual(series, percent=True):
     key = os.environ.get("FRED_API_KEY")
     if not key:
         print("FRED_API_KEY not set; T-bill statistics left out")
         return {}
     url = f"https://api.stlouisfed.org/fred/series/observations?series_id={series}&file_type=json&frequency=a&api_key={key}"
     obs = httpx.get(url, timeout=30).json()["observations"]
-    return {int(o["date"][:4]): float(o["value"]) / 100 for o in obs if o["value"] != "."}
+    return {int(o["date"][:4]): float(o["value"]) / (100 if percent else 1) for o in obs if o["value"] != "."}
 
 
 def classify(gdp, cpi):
@@ -59,6 +59,12 @@ def classify(gdp, cpi):
 def main():
     gdp = worldbank("NY.GDP.MKTP.KD.ZG")
     cpi = worldbank("FP.CPI.TOTL.ZG")
+    # The World Bank publishes U.S. inflation later than GDP. Its figure is the change in the BLS
+    # CPI-U annual average, so a missing latest year is filled from the same index on FRED.
+    cpi_u = fred_annual("CPIAUCSL", percent=False)
+    for y in gdp:
+        if y not in cpi and y in cpi_u and y - 1 in cpi_u:
+            cpi[y] = (cpi_u[y] / cpi_u[y - 1] - 1) * 100
     spx = yahoo_daily("%5EGSPC")
     bill_avg = fred_annual("TB3MS")
 

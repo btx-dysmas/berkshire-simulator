@@ -16,7 +16,7 @@ export async function render(root) {
           mostly falls in. Two Bayesian linear regressions with weak normal priors are fitted:</p>
         <div class="eq">log growth_t  = a + b·GDPgap_t + c·CPIgap_t + e_t
 Δmargin_t     = −κ·(margin_t−1 − m̄) + d·GDPgap_t + f·CPIgap_t + u_t</div>
-        <p>A gap is that year's real GDP growth or inflation minus its 1961–2024 average. With a dozen observations, ordinary least squares lets
+        <p>A gap is that year's real GDP growth or inflation minus its 1961–2025 average. With a dozen observations, ordinary least squares lets
           one unusual year set a coefficient; the priors (shown next to every fitted value in the app) pull uncertain estimates toward ordinary ones.
           The posterior standard deviation of <code>a</code> becomes the uncertainty in long-run growth, drawn once per path.</p>
         <p>The tails of <code>e</code> come from its excess kurtosis, matched to a Student-t and shrunk toward 5 degrees of freedom. The correlation

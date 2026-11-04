@@ -18,7 +18,7 @@ Shocks are Student-t, with degrees of freedom matched to the residuals' excess k
 
 ## 4. Regimes from data, not guesses
 
-Five regimes are classified from World Bank GDP and CPI data for 1961–2024. The transition matrix is counts of consecutive years. The first version smoothed it by adding half a count to every cell, which nearly doubled the frequency of severe crises (there were only three crisis years in the sample). Smoothing now adds one pseudo-count per row, spread in proportion to how common each regime is. The chain's long-run shares match history within a point.
+Five regimes are classified from World Bank GDP and CPI data for 1961–2025 (the latest year's inflation comes from the BLS CPI-U on FRED when the World Bank has not published it yet). The transition matrix is counts of consecutive years. The first version smoothed it by adding half a count to every cell, which nearly doubled the frequency of severe crises (there were only three crisis years in the sample). Smoothing now adds one pseudo-count per row, spread in proportion to how common each regime is. The chain's long-run shares match history within a point.
 
 S&P 500 returns are paired with each regime using the July-to-June window around the year, because markets move ahead of the economy. Calendar-year returns put 2009's rebound in the crisis bucket.
 

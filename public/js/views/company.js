@@ -225,7 +225,7 @@ function draw(r) {
         <table class="grid"><thead><tr><th>Regime</th><th class="r">Share of years</th><th class="r">Paths with one or more</th></tr></thead><tbody>
           ${r.regimes.map((g) => `<tr><td>${esc(g.label)}</td><td class="r">${pct(g.share)}</td><td class="r">${pct(g.ever, 0)}</td></tr>`).join("")}
         </tbody></table>
-        <details class="explain"><summary>Where these come from</summary><p>A Markov chain estimated from World Bank GDP and inflation data, 1961–2024. The <a href="#/method">Method</a> page has the transition table.</p></details>
+        <details class="explain"><summary>Where these come from</summary><p>A Markov chain estimated from World Bank GDP and inflation data, 1961–2025. The <a href="#/method">Method</a> page has the transition table.</p></details>
       </section>
     </div>
 
@@ -376,7 +376,7 @@ function historyHTML() {
         </div>
       </div>
     </div>
-    <details class="explain"><summary>Why priors</summary><p>Gaps are each year's GDP growth and inflation minus their 1961–2024 averages. With a dozen observations, least squares lets one odd
+    <details class="explain"><summary>Why priors</summary><p>Gaps are each year's GDP growth and inflation minus their 1961–2025 averages. With a dozen observations, least squares lets one odd
       year set a coefficient; the priors pull uncertain estimates toward ordinary values. The least-squares column shows what the data alone would say.</p></details>
   </details>`;
 }
