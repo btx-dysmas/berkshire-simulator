@@ -47,7 +47,7 @@ Light and dark themes, following the system setting until you pick one.
 | Source | Used for |
 | --- | --- |
 | SEC EDGAR company facts and submissions | Annual and quarterly financials, share counts, SIC codes |
-| Berkshire 10-Q (June 30, 2026) and earnings releases | Seed balance sheet, float and segment earnings ([data/berkshire.json](data/berkshire.json)) |
+| Berkshire 10-Q (September 30, 2026) and earnings releases | Seed balance sheet, float and segment earnings ([data/berkshire.json](data/berkshire.json)) |
 | World Bank | U.S. real GDP growth and CPI inflation, 1961 onward |
 | FRED (TB3MS, CPIAUCSL) | 3-month T-bill yields by year; CPI-U inflation for the latest year before the World Bank publishes it |
 | Yahoo Finance | Share prices, the 10-year Treasury yield, betas, S&P 500 history |

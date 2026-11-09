@@ -62,7 +62,7 @@ FCFF_t        = revenue_t·margin_t·(1 − tax) − Δrevenue_t / (sales to cap
           <p>The Berkshire page simulates the balance sheet rather than revenue and margins. Float is carried as a liability at face in book value and at
             the present value of what it will cost in intrinsic value. Operating, GAAP and look-through earnings are computed on the same path.
             Acquisitions arrive at random and are paid in cash or stock; buybacks happen only below intrinsic value unless the policy says otherwise.</p>
-          <p>Seed figures come from the 10-Q for June 30, 2026 and the 2025 and Q2 2026 earnings releases. Where a figure is a modeling choice rather
+          <p>Seed figures come from the 10-Q for September 30, 2026 and the 2025 and Q3 2026 earnings releases. Where a figure is a modeling choice rather
             than a filing (multiples, retention, return on retained earnings), it is an editable assumption.</p>
         </div></section>
         <section class="panel"><header><h2>Year by year</h2></header>

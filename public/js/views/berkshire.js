@@ -120,7 +120,7 @@ function draw(r) {
   const swing = e.volatility.gaap / e.volatility.op;
   $("#out").innerHTML = `
     <section class="panel hero">
-      <div class="hero-top"><h2>10,000 simulated decades · balance sheet as of the June 2026 10-Q</h2></div>
+      <div class="hero-top"><h2>10,000 simulated decades · balance sheet as of the September 2026 10-Q</h2></div>
       <p class="claim">The model values Berkshire at <b>${px(s.start.iv_ps)}</b> a Class A share, against a price of ${px(s.start.price)}.
         Value per share compounds at about <b>${pct(g.iv_ps.p50)}</b> a year in the median future, and a buyer at today's price earns ${pct(g.holder.p50)}
         because the stock ${p2v > 1 ? "starts at a premium to" : "starts below"} its value.</p>
